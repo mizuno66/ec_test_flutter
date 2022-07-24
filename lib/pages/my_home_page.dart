@@ -8,13 +8,11 @@ final cartProvider = StateNotifierProvider<Cart, Map<int, int>>((ref) {
   return Cart();
 });
 
-class MyHomePage extends HookConsumerWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref){
-    final cart = ref.watch(cartProvider);
-
+  Widget build(BuildContext context){
     return FutureBuilder
     (
       future: ProductRepository().fetch(),
@@ -44,31 +42,36 @@ class MyHomePage extends HookConsumerWidget {
             (
               children: <Widget> [
                 Text(snapshot.data![i].getName()),
-                Row
-                (
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: FloatingActionButton(
-                        onPressed: () => ref.read(cartProvider.notifier).remove(snapshot.data![i].id),
-                        backgroundColor: Colors.blue,
-                        child: const Icon(Icons.remove),
-                      ),
-                    ),
-                    Text((cart[snapshot.data![i].id] ?? 0).toString()),
-                    SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: FloatingActionButton(
-                        onPressed: () => ref.read(cartProvider.notifier).add(snapshot.data![i].id),
-                        backgroundColor: Colors.blue,
-                        child: const Icon(Icons.add),
-                      ),
-                    ),
-                  ]
-                )
+                Consumer(builder: (context, ref, _) {
+                  final cart = ref.watch(cartProvider);
+                  return(
+                    Row
+                    (
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: FloatingActionButton(
+                            onPressed: () => ref.read(cartProvider.notifier).remove(snapshot.data![i].id),
+                            backgroundColor: Colors.blue,
+                            child: const Icon(Icons.remove),
+                          ),
+                        ),
+                        Text((cart[snapshot.data![i].id] ?? 0).toString()),
+                        SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: FloatingActionButton(
+                            onPressed: () => ref.read(cartProvider.notifier).add(snapshot.data![i].id),
+                            backgroundColor: Colors.blue,
+                            child: const Icon(Icons.add),
+                          ),
+                        ),
+                      ]
+                    )
+                  );
+                })
               ],
             )
           ))
