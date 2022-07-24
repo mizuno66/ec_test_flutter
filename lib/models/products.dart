@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
+
+@immutable
 class Product{
   final int id;
   final String name;
   final String description;
 
-  Product({
+  const Product({
     required this.id,
     required this.name,
     required this.description

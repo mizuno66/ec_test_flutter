@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:ec_test/models/products.dart';
 import 'package:flutter/foundation.dart';
-import 'package:hello_world/models/products.dart';
 import 'package:http/http.dart' as http;
 
 class ProductRepository{
   Future<List<Product>> fetch() async {
+    debugPrint("call ProductRepository fetch()");
     try {
       final response = await http.get(Uri.http('localhost:3000', 'product'));
       await Future.delayed(

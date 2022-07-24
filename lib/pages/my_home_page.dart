@@ -1,19 +1,20 @@
+import 'package:ec_test/models/cart.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/models/products.dart';
-import 'package:hello_world/repository/products_repository.dart';
+import 'package:ec_test/models/products.dart';
+import 'package:ec_test/repository/products_repository.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class MyHomePage extends StatefulWidget {
+final cartProvider = StateNotifierProvider<Cart, Map<int, int>>((ref) {
+  return Cart();
+});
+
+class MyHomePage extends HookConsumerWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
+  Widget build(BuildContext context, WidgetRef ref){
+    final cart = ref.watch(cartProvider);
 
-class _MyHomePageState extends State<MyHomePage> {
-  Map<Product, int> count = {};
-
-  @override
-  Widget build(BuildContext context){
     return FutureBuilder
     (
       future: ProductRepository().fetch(),
@@ -51,23 +52,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       width: 24,
                       height: 24,
                       child: FloatingActionButton(
-                        onPressed: () => setState(() {
-                          if ((count[snapshot.data![i]] ?? 0) == 0) return;
-                          count[snapshot.data![i]] =(count[snapshot.data![i]] ?? 0) - 1;
-                        }),
+                        onPressed: () => ref.read(cartProvider.notifier).remove(snapshot.data![i].id),
                         backgroundColor: Colors.blue,
                         child: const Icon(Icons.remove),
                       ),
                     ),
-                    Text(count[snapshot.data![i]]?.toString() ?? '0'),
+                    Text((cart[snapshot.data![i].id] ?? 0).toString()),
                     SizedBox(
                       width: 24,
                       height: 24,
                       child: FloatingActionButton(
-                        onPressed: () => setState(() {
-                          if (count[snapshot.data![i]] == null) count[snapshot.data![i]] = 0;
-                          count[snapshot.data![i]] =(count[snapshot.data![i]] ?? 0) + 1;
-                        }),
+                        onPressed: () => ref.read(cartProvider.notifier).add(snapshot.data![i].id),
                         backgroundColor: Colors.blue,
                         child: const Icon(Icons.add),
                       ),
