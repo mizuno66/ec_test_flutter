@@ -1,12 +1,8 @@
-import 'package:ec_test/models/cart.dart';
+import 'package:ec_test/providers/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:ec_test/models/products.dart';
 import 'package:ec_test/repository/products_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-final cartProvider = StateNotifierProvider<Cart, Map<int, int>>((ref) {
-  return Cart();
-});
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);

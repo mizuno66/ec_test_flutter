@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+final cartProvider = StateNotifierProvider<Cart, Map<int, int>>((ref) {
+  return Cart();
+});
+
 class Cart extends StateNotifier<Map<int, int>> {
     Cart(): super(<int, int>{});
 
